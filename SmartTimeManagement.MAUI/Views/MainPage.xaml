@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodels="clr-namespace:SmartTimeManagement.MAUI.ViewModels"
+             x:Class="SmartTimeManagement.MAUI.Views.MainPage"
+             Title="Ana Sayfa">
+
+    <ContentPage.BindingContext>
+        <viewmodels:MainViewModel />
+    </ContentPage.BindingContext>
+
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Yenile" Command="{Binding RefreshCommand}" />
+        <ToolbarItem Text="Çıkış" Command="{Binding LogoutCommand}" />
+    </ContentPage.ToolbarItems>
+
+    <RefreshView IsRefreshing="{Binding IsLoading}" Command="{Binding RefreshCommand}">
+        <ScrollView>
+            <StackLayout Padding="20" Spacing="20">
+
+                <!-- Welcome Message -->
+                <Frame BackgroundColor="{DynamicResource Primary}" CornerRadius="15" HasShadow="True" Padding="20">
+                    <StackLayout>
+                        <Label Text="{Binding WelcomeMessage}" 
+                               FontSize="24" 
+                               FontAttributes="Bold" 
+                               TextColor="White" 
+                               HorizontalOptions="Center" />
+                        <!-- Debug: Kullanıcı ID'si -->
+                        <Label Text="{Binding CurrentUserDebugInfo}" 
+                               FontSize="12" 
+                               TextColor="LightGray" 
+                               HorizontalOptions="Center" />
+                        <Label Text="Bugün ne yapmayı planlıyorsun?" 
+                               FontSize="16" 
+                               TextColor="White" 
+                               HorizontalOptions="Center" />
+                    </StackLayout>
+                </Frame>
+
+                <!-- Statistics Cards -->
+                <Grid ColumnDefinitions="*,*,*" ColumnSpacing="10">
+                    <Frame Grid.Column="0" BackgroundColor="{DynamicResource Primary}" CornerRadius="10" HasShadow="True" Padding="15">
+                        <StackLayout HorizontalOptions="Center">
+                            <Label Text="{Binding TotalTasks}" FontSize="24" FontAttributes="Bold" HorizontalOptions="Center" TextColor="White" />
+                            <Label Text="Toplam Görev" FontSize="12" HorizontalOptions="Center" TextColor="White" />
+                        </StackLayout>
+                    </Frame>
+                    
+                    <Frame Grid.Column="1" BackgroundColor="{DynamicResource Success}" CornerRadius="10" HasShadow="True" Padding="15">
+                        <StackLayout HorizontalOptions="Center">
+                            <Label Text="{Binding CompletedTasks}" FontSize="24" FontAttributes="Bold" HorizontalOptions="Center" TextColor="White" />
+                            <Label Text="Tamamlanan" FontSize="12" HorizontalOptions="Center" TextColor="White" />
+                        </StackLayout>
+                    </Frame>
+                    
+                    <Frame Grid.Column="2" BackgroundColor="{DynamicResource Warning}" CornerRadius="10" HasShadow="True" Padding="15">
+                        <StackLayout HorizontalOptions="Center">
+                            <Label Text="{Binding PendingTasks}" FontSize="24" FontAttributes="Bold" HorizontalOptions="Center" TextColor="White" />
+                            <Label Text="Bekleyen" FontSize="12" HorizontalOptions="Center" TextColor="White" />
+                        </StackLayout>
+                    </Frame>
+                </Grid>
+
+                <!-- Quick Actions -->
+                <Frame BackgroundColor="White" CornerRadius="10" HasShadow="True" Padding="15">
+                    <StackLayout>
+                        <Label Text="Hızlı İşlemler" FontSize="18" FontAttributes="Bold" Margin="0,0,0,15" />
+                        <Grid ColumnDefinitions="*,*" RowDefinitions="Auto,Auto" ColumnSpacing="10" RowSpacing="10">
+                            <Button Grid.Row="0" Grid.Column="0" 
+                                    Text="Yeni Görev" 
+                                    Command="{Binding NewTaskCommand}"
+                                    BackgroundColor="{DynamicResource Primary}"
+                                    TextColor="White"
+                                    CornerRadius="8" />
+                            <Button Grid.Row="0" Grid.Column="1" 
+                                    Text="Hatırlatıcı Ekle" 
+                                    Command="{Binding NewReminderCommand}"
+                                    BackgroundColor="{DynamicResource Secondary}"
+                                    TextColor="White"
+                                    CornerRadius="8" />
+                            <Button Grid.Row="1" Grid.Column="0" 
+                                    Text="Görevleri Görüntüle" 
+                                    Command="{Binding ViewTasksCommand}"
+                                    BackgroundColor="{DynamicResource Success}"
+                                    TextColor="White"
+                                    CornerRadius="8" />
+                            <Button Grid.Row="1" Grid.Column="1" 
+                                    Text="Rapor Oluştur" 
+                                    Command="{Binding CreateReportCommand}"
+                                    BackgroundColor="{DynamicResource Warning}"
+                                    TextColor="White"
+                                    CornerRadius="8" />
+                        </Grid>
+                    </StackLayout>
+                </Frame>
+
+                <!-- Today's Tasks -->
+                <Frame BackgroundColor="White" CornerRadius="10" HasShadow="True" Padding="15">
+                    <StackLayout>
+                        <Label Text="Bugünün Görevleri" FontSize="18" FontAttributes="Bold" Margin="0,0,0,15" />
+                        <CollectionView ItemsSource="{Binding TodaysTasks}" HeightRequest="200">
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate>
+                                    <Frame BackgroundColor="{DynamicResource Gray100}" CornerRadius="8" Padding="10" Margin="0,5">
+                                        <StackLayout>
+                                            <Label Text="{Binding Title}" FontAttributes="Bold" FontSize="14" />
+                                            <Label Text="{Binding Description}" FontSize="12" TextColor="{DynamicResource Gray600}" />
+                                            <StackLayout Orientation="Horizontal">
+                                                <Label Text="{Binding Priority, StringFormat='Öncelik: {0}'}" FontSize="11" TextColor="{DynamicResource Primary}" />
+                                                <Label Text="{Binding DueDate, StringFormat='Bitiş: {0:HH:mm}'}" FontSize="11" TextColor="{DynamicResource Secondary}" />
+                                            </StackLayout>
+                                        </StackLayout>
+                                    </Frame>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                            <CollectionView.EmptyView>
+                                <StackLayout HorizontalOptions="Center" VerticalOptions="Center">
+                                    <Label Text="Bugün için görev yok" 
+                                           FontSize="14" 
+                                           TextColor="{DynamicResource Gray500}"
+                                           HorizontalOptions="Center" />
+                                </StackLayout>
+                            </CollectionView.EmptyView>
+                        </CollectionView>
+                    </StackLayout>
+                </Frame>
+
+                <!-- Recent Activity -->
+                <Frame BackgroundColor="White" CornerRadius="10" HasShadow="True" Padding="15">
+                    <StackLayout>
+                        <Label Text="Son Aktiviteler" FontSize="18" FontAttributes="Bold" Margin="0,0,0,15" />
+                        <CollectionView ItemsSource="{Binding RecentActivities}" HeightRequest="150">
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate>
+                                    <StackLayout Orientation="Horizontal" Padding="5">
+                                        <BoxView Color="{DynamicResource Primary}" WidthRequest="4" HeightRequest="20" />
+                                        <StackLayout Spacing="2" Margin="10,0,0,0">
+                                            <Label Text="{Binding Description}" FontSize="12" />
+                                            <Label Text="{Binding DateTime, StringFormat='{0:dd/MM/yyyy HH:mm}'}" 
+                                                   FontSize="10" 
+                                                   TextColor="{DynamicResource Gray500}" />
+                                        </StackLayout>
+                                    </StackLayout>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                            <CollectionView.EmptyView>
+                                <StackLayout HorizontalOptions="Center" VerticalOptions="Center">
+                                    <Label Text="Henüz aktivite yok" 
+                                           FontSize="14" 
+                                           TextColor="{DynamicResource Gray500}"
+                                           HorizontalOptions="Center" />
+                                </StackLayout>
+                            </CollectionView.EmptyView>
+                        </CollectionView>
+                    </StackLayout>
+                </Frame>
+
+                <!-- User Settings -->
+                <Frame BackgroundColor="LightGray" CornerRadius="15" HasShadow="True" Padding="20">
+                    <StackLayout>
+                        <Label Text="Kullanıcı Ayarları" 
+                               FontSize="18" 
+                               FontAttributes="Bold" 
+                               HorizontalOptions="Center" 
+                               Margin="0,0,0,15" />
+                        
+                        <Button Text="Şifre Değiştir"
+                                Command="{Binding ChangePasswordCommand}"
+                                BackgroundColor="#FF9800"
+                                TextColor="White"
+                                CornerRadius="10"
+                                FontSize="16"
+                                HeightRequest="50" />
+                    </StackLayout>
+                </Frame>
+
+                <!-- Loading Indicator -->
+                <ActivityIndicator IsVisible="{Binding IsLoading}"
+                                   IsRunning="{Binding IsLoading}"
+                                   Color="{DynamicResource Primary}"
+                                   HeightRequest="50" />
+
+            </StackLayout>
+        </ScrollView>
+    </RefreshView>
+</ContentPage>

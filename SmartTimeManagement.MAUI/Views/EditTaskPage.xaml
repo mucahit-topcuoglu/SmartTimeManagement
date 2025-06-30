@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage x:Class="SmartTimeManagement.MAUI.Views.EditTaskPage"
+             xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodels="clr-namespace:SmartTimeManagement.MAUI.ViewModels"
+             xmlns:converters="clr-namespace:SmartTimeManagement.MAUI.Converters"
+             Title="Görev Düzenle">
+    
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converters:InvertedBooleanConverter x:Key="InvertedBoolConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    
+    <ContentPage.BindingContext>
+        <viewmodels:EditTaskViewModel />
+    </ContentPage.BindingContext>
+
+    <ScrollView Padding="20">
+        <StackLayout Spacing="20">
+            <!-- Header -->
+            <StackLayout>
+                <Label Text="Görev Bilgilerini Düzenle" 
+                       FontSize="24" 
+                       FontAttributes="Bold"
+                       TextColor="{DynamicResource Primary}"
+                       HorizontalOptions="Center" />
+            </StackLayout>
+
+            <!-- Title -->
+            <StackLayout>
+                <Label Text="Başlık *" FontAttributes="Bold" />
+                <Entry Text="{Binding Title}" 
+                       Placeholder="Görev başlığı"
+                       BackgroundColor="White" />
+            </StackLayout>
+
+            <!-- Description -->
+            <StackLayout>
+                <Label Text="Açıklama" FontAttributes="Bold" />
+                <Editor Text="{Binding Description}" 
+                        Placeholder="Görev açıklaması (isteğe bağlı)"
+                        HeightRequest="100"
+                        BackgroundColor="White" />
+            </StackLayout>
+
+            <!-- Priority -->
+            <StackLayout>
+                <Label Text="Öncelik" FontAttributes="Bold" />
+                <Picker x:Name="PriorityPicker" 
+                        Title="Öncelik Seçin"
+                        SelectedIndex="{Binding SelectedPriorityIndex}"
+                        ItemsSource="{Binding PriorityOptions}"
+                        BackgroundColor="White" />
+            </StackLayout>
+
+            <!-- Category -->
+            <StackLayout>
+                <Label Text="Kategori" FontAttributes="Bold" />
+                <Picker x:Name="CategoryPicker" 
+                        Title="Kategori Seçin"
+                        SelectedItem="{Binding SelectedCategory}"
+                        ItemsSource="{Binding Categories}"
+                        ItemDisplayBinding="{Binding Name}"
+                        BackgroundColor="White" />
+            </StackLayout>
+
+            <!-- Due Date -->
+            <StackLayout>
+                <Label Text="Bitiş Tarihi" FontAttributes="Bold" />
+                <DatePicker Date="{Binding DueDate}" 
+                            MinimumDate="{Binding MinDate}"
+                            BackgroundColor="White" />
+            </StackLayout>
+
+            <!-- Due Time -->
+            <StackLayout>
+                <Label Text="Bitiş Saati" FontAttributes="Bold" />
+                <TimePicker Time="{Binding DueTime}" 
+                            BackgroundColor="White" />
+            </StackLayout>
+
+            <!-- Estimated Duration -->
+            <StackLayout>
+                <Label Text="Tahmini Süre (dakika)" FontAttributes="Bold" />
+                <Entry Text="{Binding EstimatedDuration}" 
+                       Placeholder="60"
+                       Keyboard="Numeric"
+                       BackgroundColor="White" />
+            </StackLayout>
+
+            <!-- Status -->
+            <StackLayout>
+                <Label Text="Durum" FontAttributes="Bold" />
+                <Picker x:Name="StatusPicker" 
+                        Title="Durum Seçin"
+                        SelectedIndex="{Binding SelectedStatusIndex}"
+                        ItemsSource="{Binding StatusOptions}"
+                        BackgroundColor="White" />
+            </StackLayout>
+
+            <!-- Buttons -->
+            <StackLayout Orientation="Horizontal" Spacing="10">
+                <Button Text="Güncelle" 
+                        Command="{Binding UpdateCommand}"
+                        BackgroundColor="{DynamicResource Primary}"
+                        TextColor="White"
+                        HorizontalOptions="FillAndExpand"
+                        IsEnabled="{Binding IsBusy, Converter={StaticResource InvertedBoolConverter}}" />
+                
+                <Button Text="İptal" 
+                        Command="{Binding CancelCommand}"
+                        BackgroundColor="{DynamicResource Secondary}"
+                        TextColor="White"
+                        HorizontalOptions="FillAndExpand" />
+            </StackLayout>
+
+            <!-- Loading indicator -->
+            <ActivityIndicator IsVisible="{Binding IsBusy}" IsRunning="{Binding IsBusy}" />
+        </StackLayout>
+    </ScrollView>
+</ContentPage>

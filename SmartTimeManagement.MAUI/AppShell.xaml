@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Shell
+    x:Class="SmartTimeManagement.MAUI.AppShell"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:local="clr-namespace:SmartTimeManagement.MAUI.Views"
+    Title="Akıllı Zaman Yönetimi">
+
+    <!-- Login Flow -->
+    <ShellContent
+        Route="login"
+        Shell.FlyoutBehavior="Disabled"
+        ContentTemplate="{DataTemplate local:LoginPage}" />
+    
+    <ShellContent
+        Route="register"
+        Shell.FlyoutBehavior="Disabled"
+        ContentTemplate="{DataTemplate local:RegisterPage}" />
+
+    <!-- Main App Flow -->
+    <TabBar Route="main">
+        <ShellContent
+            Title="Ana Sayfa"
+            Icon="home.png"
+            Route="home"
+            ContentTemplate="{DataTemplate local:MainPage}" />
+            
+        <ShellContent
+            Title="Görevler"
+            Icon="task.png"
+            Route="tasks"
+            ContentTemplate="{DataTemplate local:TasksPage}" />
+            
+        <ShellContent
+            Title="Hatırlatıcılar"
+            Icon="reminder.png"
+            Route="reminders"
+            ContentTemplate="{DataTemplate local:RemindersPage}" />
+            
+        <ShellContent
+            Title="Raporlar"
+            Icon="report.png"
+            Route="reports"
+            ContentTemplate="{DataTemplate local:ReportsPage}" />
+    </TabBar>
+
+</Shell>

@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage x:Class="SmartTimeManagement.MAUI.Views.AddReminderPage"
+             xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodels="clr-namespace:SmartTimeManagement.MAUI.ViewModels"
+             Title="Yeni Hatırlatıcı">
+    
+    <ContentPage.BindingContext>
+        <viewmodels:AddReminderViewModel />
+    </ContentPage.BindingContext>
+
+    <ScrollView Padding="20">
+        <StackLayout Spacing="20">
+            <!-- Header -->
+            <StackLayout>
+                <Label Text="Hatırlatıcı Bilgileri" 
+                       FontSize="24" 
+                       FontAttributes="Bold"
+                       TextColor="{DynamicResource Primary}"
+                       HorizontalOptions="Center" />
+            </StackLayout>
+
+            <!-- Title -->
+            <StackLayout>
+                <Label Text="Başlık *" FontAttributes="Bold" />
+                <Entry Text="{Binding Title}" 
+                       Placeholder="Hatırlatıcı başlığı"
+                       BackgroundColor="White" />
+            </StackLayout>
+
+            <!-- Description -->
+            <StackLayout>
+                <Label Text="Açıklama" FontAttributes="Bold" />
+                <Editor Text="{Binding Description}" 
+                        Placeholder="Hatırlatıcı açıklaması (isteğe bağlı)"
+                        HeightRequest="100"
+                        BackgroundColor="White" />
+            </StackLayout>
+
+            <!-- Reminder Date -->
+            <StackLayout>
+                <Label Text="Hatırlatma Tarihi *" FontAttributes="Bold" />
+                <DatePicker Date="{Binding ReminderDate}" 
+                            MinimumDate="{Binding MinDate}"
+                            BackgroundColor="White" />
+            </StackLayout>
+
+            <!-- Reminder Time -->
+            <StackLayout>
+                <Label Text="Hatırlatma Saati *" FontAttributes="Bold" />
+                <TimePicker Time="{Binding ReminderTime}" 
+                            BackgroundColor="White" />
+            </StackLayout>
+
+            <!-- Reminder Type -->
+            <StackLayout>
+                <Label Text="Hatırlatıcı Türü" FontAttributes="Bold" />
+                <Picker x:Name="TypePicker" 
+                        Title="Tür Seçin"
+                        SelectedIndex="{Binding SelectedTypeIndex}"
+                        ItemsSource="{Binding TypeOptions}"
+                        BackgroundColor="White" />
+            </StackLayout>
+
+            <!-- Related Task (Optional) -->
+            <StackLayout>
+                <Label Text="İlgili Görev (İsteğe Bağlı)" FontAttributes="Bold" />
+                <Picker x:Name="TaskPicker" 
+                        Title="Görev Seçin"
+                        SelectedItem="{Binding SelectedTask}"
+                        ItemsSource="{Binding Tasks}"
+                        ItemDisplayBinding="{Binding Title}"
+                        BackgroundColor="White" />
+            </StackLayout>
+
+            <!-- Buttons -->
+            <StackLayout Orientation="Horizontal" Spacing="10">
+                <Button Text="Kaydet" 
+                        Command="{Binding SaveCommand}"
+                        BackgroundColor="{DynamicResource Primary}"
+                        TextColor="White"
+                        HorizontalOptions="FillAndExpand" />
+                
+                <Button Text="İptal" 
+                        Command="{Binding CancelCommand}"
+                        BackgroundColor="{DynamicResource Secondary}"
+                        TextColor="White"
+                        HorizontalOptions="FillAndExpand" />
+            </StackLayout>
+        </StackLayout>
+    </ScrollView>
+</ContentPage>

@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage x:Class="SmartTimeManagement.MAUI.Views.ReportsPage"
+             xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodels="clr-namespace:SmartTimeManagement.MAUI.ViewModels"
+             Title="Raporlar">
+    
+    <ContentPage.BindingContext>
+        <viewmodels:ReportsViewModel />
+    </ContentPage.BindingContext>
+
+    <ScrollView Padding="20">
+        <StackLayout Spacing="20">
+            <!-- Header -->
+            <Label Text="Üretkenlik Raporları" 
+                   FontSize="24" 
+                   FontAttributes="Bold" 
+                   HorizontalOptions="Center"
+                   Margin="0,0,0,20" />
+
+            <!-- Date Range Selection -->
+            <Frame BackgroundColor="White" BorderColor="{DynamicResource Gray200}" CornerRadius="10" Padding="15">
+                <StackLayout>
+                    <Label Text="Rapor Tarihi Aralığı" FontAttributes="Bold" FontSize="16" />
+                    <StackLayout Orientation="Horizontal" Spacing="10">
+                        <DatePicker x:Name="StartDatePicker"
+                                    Date="{Binding StartDate}"
+                                    HorizontalOptions="FillAndExpand" />
+                        <Label Text="-" VerticalOptions="Center" />
+                        <DatePicker x:Name="EndDatePicker"
+                                    Date="{Binding EndDate}"
+                                    HorizontalOptions="FillAndExpand" />
+                    </StackLayout>
+                    <Button Text="Rapor Oluştur"
+                            Command="{Binding GenerateReportCommand}"
+                            BackgroundColor="{DynamicResource Primary}"
+                            TextColor="White"
+                            Margin="0,10,0,0" />
+                </StackLayout>
+            </Frame>
+
+            <!-- Summary Cards -->
+            <StackLayout IsVisible="{Binding HasReportData}">
+                <Label Text="Özet" FontAttributes="Bold" FontSize="18" Margin="0,10,0,10" />
+                
+                <Grid ColumnDefinitions="*,*" RowDefinitions="Auto,Auto" ColumnSpacing="10" RowSpacing="10">
+                    <!-- Total Tasks -->
+                    <Frame Grid.Row="0" Grid.Column="0" BackgroundColor="{DynamicResource Primary}" CornerRadius="10" Padding="15">
+                        <StackLayout>
+                            <Label Text="{Binding TotalTasks}" 
+                                   FontSize="32" 
+                                   FontAttributes="Bold" 
+                                   TextColor="White"
+                                   HorizontalOptions="Center" />
+                            <Label Text="Toplam Görev" 
+                                   FontSize="14" 
+                                   TextColor="White"
+                                   HorizontalOptions="Center" />
+                        </StackLayout>
+                    </Frame>
+
+                    <!-- Completed Tasks -->
+                    <Frame Grid.Row="0" Grid.Column="1" BackgroundColor="{DynamicResource Success}" CornerRadius="10" Padding="15">
+                        <StackLayout>
+                            <Label Text="{Binding CompletedTasks}" 
+                                   FontSize="32" 
+                                   FontAttributes="Bold" 
+                                   TextColor="White"
+                                   HorizontalOptions="Center" />
+                            <Label Text="Tamamlanan" 
+                                   FontSize="14" 
+                                   TextColor="White"
+                                   HorizontalOptions="Center" />
+                        </StackLayout>
+                    </Frame>
+
+                    <!-- Total Time -->
+                    <Frame Grid.Row="1" Grid.Column="0" BackgroundColor="{DynamicResource Warning}" CornerRadius="10" Padding="15">
+                        <StackLayout>
+                            <Label Text="{Binding TotalHours, StringFormat='{0:F1}h'}" 
+                                   FontSize="32" 
+                                   FontAttributes="Bold" 
+                                   TextColor="White"
+                                   HorizontalOptions="Center" />
+                            <Label Text="Toplam Süre" 
+                                   FontSize="14" 
+                                   TextColor="White"
+                                   HorizontalOptions="Center" />
+                        </StackLayout>
+                    </Frame>
+
+                    <!-- Completion Rate -->
+                    <Frame Grid.Row="1" Grid.Column="1" BackgroundColor="{DynamicResource Secondary}" CornerRadius="10" Padding="15">
+                        <StackLayout>
+                            <Label Text="{Binding CompletionRate, StringFormat='{0:F1}%'}" 
+                                   FontSize="32" 
+                                   FontAttributes="Bold" 
+                                   TextColor="White"
+                                   HorizontalOptions="Center" />
+                            <Label Text="Tamamlanma Oranı" 
+                                   FontSize="14" 
+                                   TextColor="White"
+                                   HorizontalOptions="Center" />
+                        </StackLayout>
+                    </Frame>
+                </Grid>
+            </StackLayout>
+
+            <!-- Charts Section -->
+            <StackLayout IsVisible="{Binding HasReportData}">
+                <Label Text="Detay Grafikleri" FontAttributes="Bold" FontSize="18" Margin="0,20,0,10" />
+                
+                <!-- Task Status Chart -->
+                <Frame BackgroundColor="White" BorderColor="{DynamicResource Gray200}" CornerRadius="10" Padding="15">
+                    <StackLayout>
+                        <Label Text="Görev Durumu Dağılımı" FontAttributes="Bold" FontSize="16" />
+                        <!-- Chart placeholder - gerçek chart kütüphanesi ile değiştirilecek -->
+                        <StackLayout Spacing="5">
+                            <StackLayout Orientation="Horizontal">
+                                <BoxView Color="{DynamicResource Success}" WidthRequest="20" HeightRequest="20" />
+                                <Label Text="{Binding CompletedTasks, StringFormat='Tamamlanan: {0}'}" VerticalOptions="Center" />
+                            </StackLayout>
+                            <StackLayout Orientation="Horizontal">
+                                <BoxView Color="{DynamicResource Warning}" WidthRequest="20" HeightRequest="20" />
+                                <Label Text="{Binding InProgressTasks, StringFormat='Devam Eden: {0}'}" VerticalOptions="Center" />
+                            </StackLayout>
+                            <StackLayout Orientation="Horizontal">
+                                <BoxView Color="{DynamicResource Danger}" WidthRequest="20" HeightRequest="20" />
+                                <Label Text="{Binding PendingTasks, StringFormat='Bekleyen: {0}'}" VerticalOptions="Center" />
+                            </StackLayout>
+                        </StackLayout>
+                    </StackLayout>
+                </Frame>
+
+                <!-- Category Distribution -->
+                <Frame BackgroundColor="White" BorderColor="{DynamicResource Gray200}" CornerRadius="10" Padding="15">
+                    <StackLayout>
+                        <Label Text="Kategori Dağılımı" FontAttributes="Bold" FontSize="16" />
+                        <CollectionView ItemsSource="{Binding CategoryStats}" HeightRequest="200">
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate>
+                                    <StackLayout Orientation="Horizontal" Padding="5">
+                                        <BoxView Color="{DynamicResource Primary}" WidthRequest="20" HeightRequest="20" />
+                                        <Label Text="{Binding CategoryName}" VerticalOptions="Center" />
+                                        <Label Text="{Binding TaskCount, StringFormat='({0})'}" VerticalOptions="Center" />
+                                    </StackLayout>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                    </StackLayout>
+                </Frame>
+            </StackLayout>
+
+            <!-- Recent Reports -->
+            <StackLayout>
+                <Label Text="Son Raporlar" FontAttributes="Bold" FontSize="18" Margin="0,20,0,10" />
+                <CollectionView ItemsSource="{Binding RecentReports}" HeightRequest="300">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Frame BackgroundColor="White" BorderColor="{DynamicResource Gray200}" CornerRadius="10" Padding="15" Margin="0,5">
+                                <StackLayout>
+                                    <Label Text="{Binding Title}" FontAttributes="Bold" FontSize="16" />
+                                    <Label Text="{Binding ReportType, StringFormat='Tür: {0}'}" FontSize="14" TextColor="{DynamicResource Gray600}" />
+                                    <Label Text="{Binding GeneratedDate, StringFormat='Tarih: {0:dd/MM/yyyy HH:mm}'}" FontSize="12" TextColor="{DynamicResource Gray500}" />
+                                    <Button Text="Görüntüle"
+                                            Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:ReportsViewModel}}, Path=ViewReportCommand}"
+                                            CommandParameter="{Binding}"
+                                            BackgroundColor="{DynamicResource Secondary}"
+                                            TextColor="White"
+                                            FontSize="12"
+                                            HorizontalOptions="End" />
+                                </StackLayout>
+                            </Frame>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </StackLayout>
+
+            <!-- Empty State -->
+            <StackLayout IsVisible="{Binding IsEmpty}" 
+                         VerticalOptions="CenterAndExpand"
+                         HorizontalOptions="Center"
+                         Margin="0,50">
+                <Label Text="Henüz rapor oluşturulmamış" 
+                       FontSize="18" 
+                       TextColor="{DynamicResource Gray500}"
+                       HorizontalOptions="Center" />
+                <Label Text="Rapor oluşturmak için tarih aralığı seçip butona tıklayın" 
+                       FontSize="14" 
+                       TextColor="{DynamicResource Gray400}"
+                       HorizontalOptions="Center" />
+            </StackLayout>
+
+            <!-- Loading Indicator -->
+            <ActivityIndicator IsVisible="{Binding IsBusy}"
+                               IsRunning="{Binding IsBusy}"
+                               Color="{DynamicResource Primary}"
+                               HeightRequest="50" />
+        </StackLayout>
+    </ScrollView>
+</ContentPage>

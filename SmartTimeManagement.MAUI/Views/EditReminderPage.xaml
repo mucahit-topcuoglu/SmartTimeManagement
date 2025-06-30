@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage x:Class="SmartTimeManagement.MAUI.Views.EditReminderPage"
+             xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodels="clr-namespace:SmartTimeManagement.MAUI.ViewModels"
+             xmlns:converters="clr-namespace:SmartTimeManagement.MAUI.Converters"
+             x:DataType="viewmodels:EditReminderViewModel"
+             Title="Hatırlatıcı Düzenle">
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converters:BoolToTimerTextConverter x:Key="BoolToTimerTextConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <ScrollView>
+        <Grid Padding="20">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <!-- Başlık -->
+            <Label Grid.Row="0"
+                   Text="Başlık *"
+                   FontAttributes="Bold"
+                   Margin="0,0,0,5" />
+            <Entry Grid.Row="1"
+                   Text="{Binding Title}"
+                   Placeholder="Hatırlatıcı başlığını girin..."
+                   Margin="0,0,0,15" />
+
+            <!-- Açıklama -->
+            <Label Grid.Row="2"
+                   Text="Açıklama"
+                   FontAttributes="Bold"
+                   Margin="0,0,0,5" />
+            <Editor Grid.Row="3"
+                    Text="{Binding Description}"
+                    Placeholder="Hatırlatıcı açıklamasını girin..."
+                    HeightRequest="80"
+                    Margin="0,0,0,15" />
+
+            <!-- Tarih -->
+            <Label Grid.Row="4"
+                   Text="Tarih"
+                   FontAttributes="Bold"
+                   Margin="0,0,0,5" />
+            <DatePicker Grid.Row="5"
+                        Date="{Binding ReminderDate}"
+                        MinimumDate="{Binding MinDate}"
+                        Format="dd.MM.yyyy"
+                        Margin="0,0,0,15" />
+
+            <!-- Saat -->
+            <Label Grid.Row="6"
+                   Text="Saat"
+                   FontAttributes="Bold"
+                   Margin="0,0,0,5" />
+            <TimePicker Grid.Row="7"
+                        Time="{Binding ReminderTime}"
+                        Format="HH:mm"
+                        Margin="0,0,0,15" />
+
+            <!-- Tür -->
+            <Label Grid.Row="8"
+                   Text="Tür"
+                   FontAttributes="Bold"
+                   Margin="0,0,0,5" />
+            <Picker Grid.Row="9"
+                    ItemsSource="{Binding TypeOptions}"
+                    SelectedIndex="{Binding SelectedTypeIndex}"
+                    Title="Hatırlatıcı türünü seçin"
+                    Margin="0,0,0,15" />
+
+            <!-- Görev -->
+            <Label Grid.Row="10"
+                   Text="İlgili Görev (Opsiyonel)"
+                   FontAttributes="Bold"
+                   Margin="0,0,0,5" />
+            <Picker Grid.Row="11"
+                    ItemsSource="{Binding Tasks}"
+                    SelectedItem="{Binding SelectedTask}"
+                    ItemDisplayBinding="{Binding Title}"
+                    Title="Görev seçin"
+                    Margin="0,0,0,15" />
+
+            <!-- Aktif Durumu -->
+            <StackLayout Grid.Row="12" Orientation="Horizontal" Margin="0,0,0,20">
+                <CheckBox IsChecked="{Binding IsActive}" />
+                <Label Text="Aktif" VerticalOptions="Center" />
+            </StackLayout>
+
+            <!-- Butonlar -->
+            <StackLayout Grid.Row="13" Orientation="Horizontal" HorizontalOptions="FillAndExpand">
+                <Button Text="Kaydet"
+                        Command="{Binding SaveCommand}"
+                        BackgroundColor="#4CAF50"
+                        TextColor="White"
+                        HorizontalOptions="FillAndExpand"
+                        Margin="0,0,5,0" />
+                <Button Text="Sil"
+                        Command="{Binding DeleteCommand}"
+                        BackgroundColor="#F44336"
+                        TextColor="White"
+                        HorizontalOptions="FillAndExpand"
+                        Margin="5,0,5,0" />
+                <Button Text="İptal"
+                        Command="{Binding CancelCommand}"
+                        BackgroundColor="#9E9E9E"
+                        TextColor="White"
+                        HorizontalOptions="FillAndExpand"
+                        Margin="5,0,0,0" />
+            </StackLayout>
+
+            <!-- Loading Indicator -->
+            <ActivityIndicator Grid.RowSpan="14"
+                              IsVisible="{Binding IsBusy}"
+                              IsRunning="{Binding IsBusy}"
+                              Color="#2196F3"
+                              HorizontalOptions="Center"
+                              VerticalOptions="Center" />
+        </Grid>
+    </ScrollView>
+</ContentPage>

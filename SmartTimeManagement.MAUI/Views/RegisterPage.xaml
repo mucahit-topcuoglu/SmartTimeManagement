@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage x:Class="SmartTimeManagement.MAUI.Views.RegisterPage"
+             xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodels="clr-namespace:SmartTimeManagement.MAUI.ViewModels"
+             Title="Kayıt Ol"
+             Shell.NavBarIsVisible="True">
+
+    <ContentPage.BindingContext>
+        <viewmodels:RegisterViewModel />
+    </ContentPage.BindingContext>
+
+    <ScrollView>
+        <Grid Padding="20" RowSpacing="15">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <!-- Header -->
+            <StackLayout Grid.Row="0" HorizontalOptions="Center" Spacing="10">
+                <Label Text="Yeni Hesap Oluştur" 
+                       FontSize="28" 
+                       FontAttributes="Bold" 
+                       HorizontalOptions="Center" 
+                       TextColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource White}}" />
+                <Label Text="Akıllı Zaman Yönetimi'ne hoş geldiniz" 
+                       FontSize="16" 
+                       HorizontalOptions="Center" 
+                       TextColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource Gray300}}" />
+            </StackLayout>
+
+            <!-- First Name -->
+            <Entry Grid.Row="1"
+                   Text="{Binding FirstName}"
+                   Placeholder="Ad"
+                   FontSize="16"
+                   BackgroundColor="{AppThemeBinding Light={StaticResource Gray100}, Dark={StaticResource Gray900}}"
+                   TextColor="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}" />
+
+            <!-- Last Name -->
+            <Entry Grid.Row="2"
+                   Text="{Binding LastName}"
+                   Placeholder="Soyad"
+                   FontSize="16"
+                   BackgroundColor="{AppThemeBinding Light={StaticResource Gray100}, Dark={StaticResource Gray900}}"
+                   TextColor="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}" />
+
+            <!-- Email -->
+            <Entry Grid.Row="3"
+                   Text="{Binding Email}"
+                   Placeholder="Email"
+                   Keyboard="Email"
+                   FontSize="16"
+                   BackgroundColor="{AppThemeBinding Light={StaticResource Gray100}, Dark={StaticResource Gray900}}"
+                   TextColor="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}" />
+
+            <!-- Password -->
+            <Entry Grid.Row="4"
+                   Text="{Binding Password}"
+                   Placeholder="Şifre"
+                   IsPassword="True"
+                   FontSize="16"
+                   BackgroundColor="{AppThemeBinding Light={StaticResource Gray100}, Dark={StaticResource Gray900}}"
+                   TextColor="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}" />
+
+            <!-- Confirm Password -->
+            <Entry Grid.Row="5"
+                   Text="{Binding ConfirmPassword}"
+                   Placeholder="Şifre Tekrarı"
+                   IsPassword="True"
+                   FontSize="16"
+                   BackgroundColor="{AppThemeBinding Light={StaticResource Gray100}, Dark={StaticResource Gray900}}"
+                   TextColor="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}" />
+
+            <!-- Error Message -->
+            <Label Grid.Row="6"
+                   Text="{Binding ErrorMessage}"
+                   TextColor="Red"
+                   FontSize="14"
+                   IsVisible="{Binding ErrorMessage, Converter={StaticResource StringToBooleanConverter}}"
+                   HorizontalTextAlignment="Center" />
+
+            <!-- Success Message -->
+            <Label Grid.Row="7"
+                   Text="{Binding SuccessMessage}"
+                   TextColor="Green"
+                   FontSize="14"
+                   IsVisible="{Binding SuccessMessage, Converter={StaticResource StringToBooleanConverter}}"
+                   HorizontalTextAlignment="Center" />
+
+            <!-- Register Button -->
+            <Button Grid.Row="8"
+                    Text="Kayıt Ol"
+                    Command="{Binding RegisterCommand}"
+                    IsEnabled="{Binding IsLoading, Converter={StaticResource InvertedBooleanConverter}}"
+                    BackgroundColor="{StaticResource Primary}"
+                    TextColor="White"
+                    FontSize="16"
+                    FontAttributes="Bold"
+                    HeightRequest="50"
+                    CornerRadius="8" />
+
+            <!-- Loading Indicator -->
+            <ActivityIndicator Grid.Row="9"
+                               IsVisible="{Binding IsLoading}"
+                               IsRunning="{Binding IsLoading}"
+                               Color="{StaticResource Primary}"
+                               HorizontalOptions="Center" />
+
+            <!-- Back to Login -->
+            <StackLayout Grid.Row="10" 
+                         Orientation="Horizontal" 
+                         HorizontalOptions="Center" 
+                         VerticalOptions="End"
+                         Spacing="5">
+                <Label Text="Zaten hesabınız var mı?" 
+                       FontSize="14" 
+                       TextColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource Gray300}}" />
+                <Label Text="Giriş Yap" 
+                       FontSize="14" 
+                       TextColor="{StaticResource Primary}" 
+                       FontAttributes="Bold">
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding GoBackCommand}" />
+                    </Label.GestureRecognizers>
+                </Label>
+            </StackLayout>
+
+        </Grid>
+    </ScrollView>
+
+</ContentPage>

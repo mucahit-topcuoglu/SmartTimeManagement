@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage x:Class="SmartTimeManagement.MAUI.Views.AddTaskPage"
+             xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodels="clr-namespace:SmartTimeManagement.MAUI.ViewModels"
+             Title="Görev Ekle">
+    
+    <ContentPage.BindingContext>
+        <viewmodels:AddTaskViewModel />
+    </ContentPage.BindingContext>
+
+    <ScrollView Padding="20">
+        <StackLayout Spacing="20">
+            <!-- Header -->
+            <Label Text="Yeni Görev Ekle" 
+                   FontSize="24" 
+                   FontAttributes="Bold" 
+                   HorizontalOptions="Center"
+                   Margin="0,0,0,20" />
+
+            <!-- Task Title -->
+            <StackLayout>
+                <Label Text="Görev Başlığı *" FontAttributes="Bold" />
+                <Entry x:Name="TitleEntry"
+                       Text="{Binding Title}"
+                       Placeholder="Görev başlığını girin..."
+                       BackgroundColor="White"
+                       PlaceholderColor="{DynamicResource Gray400}" />
+            </StackLayout>
+
+            <!-- Task Description -->
+            <StackLayout>
+                <Label Text="Açıklama" FontAttributes="Bold" />
+                <Editor x:Name="DescriptionEditor"
+                        Text="{Binding Description}"
+                        Placeholder="Görev açıklamasını girin..."
+                        HeightRequest="100"
+                        BackgroundColor="White"
+                        PlaceholderColor="{DynamicResource Gray400}" />
+            </StackLayout>
+
+            <!-- Category -->
+            <StackLayout>
+                <Label Text="Kategori" FontAttributes="Bold" />
+                <Picker x:Name="CategoryPicker"
+                        Title="Kategori seçin..."
+                        ItemsSource="{Binding Categories}"
+                        ItemDisplayBinding="{Binding Name}"
+                        SelectedItem="{Binding SelectedCategory}" />
+            </StackLayout>
+
+            <!-- Priority -->
+            <StackLayout>
+                <Label Text="Öncelik *" FontAttributes="Bold" />
+                <Picker x:Name="PriorityPicker"
+                        Title="Öncelik seçin..."
+                        ItemsSource="{Binding PriorityOptions}"
+                        SelectedItem="{Binding SelectedPriority}" />
+            </StackLayout>
+
+            <!-- Due Date -->
+            <StackLayout>
+                <Label Text="Bitiş Tarihi" FontAttributes="Bold" />
+                <DatePicker x:Name="DueDatePicker"
+                            Date="{Binding DueDate}"
+                            MinimumDate="{Binding MinDate}"
+                            BackgroundColor="White" />
+            </StackLayout>
+
+            <!-- Due Time -->
+            <StackLayout>
+                <Label Text="Bitiş Saati" FontAttributes="Bold" />
+                <TimePicker x:Name="DueTimePicker"
+                            Time="{Binding DueTime}"
+                            BackgroundColor="White" />
+            </StackLayout>
+
+            <!-- Estimated Duration -->
+            <StackLayout>
+                <Label Text="Tahmini Süre (dakika)" FontAttributes="Bold" />
+                <Entry x:Name="EstimatedDurationEntry"
+                       Text="{Binding EstimatedDuration}"
+                       Placeholder="Örn: 60"
+                       Keyboard="Numeric"
+                       BackgroundColor="White" />
+            </StackLayout>
+
+            <!-- Is Important -->
+            <StackLayout Orientation="Horizontal">
+                <CheckBox x:Name="IsImportantCheckBox"
+                          IsChecked="{Binding IsImportant}"
+                          Color="{DynamicResource Primary}" />
+                <Label Text="Önemli görev olarak işaretle"
+                       VerticalOptions="Center" />
+            </StackLayout>
+
+            <!-- Buttons -->
+            <StackLayout Orientation="Horizontal" Spacing="10" Margin="0,20,0,0">
+                <Button Text="İptal"
+                        Command="{Binding CancelCommand}"
+                        BackgroundColor="{DynamicResource Gray300}"
+                        TextColor="{DynamicResource Gray700}"
+                        HorizontalOptions="FillAndExpand" />
+                
+                <Button Text="Kaydet"
+                        Command="{Binding SaveCommand}"
+                        BackgroundColor="{DynamicResource Primary}"
+                        TextColor="White"
+                        HorizontalOptions="FillAndExpand" />
+            </StackLayout>
+
+            <!-- Loading Indicator -->
+            <ActivityIndicator IsVisible="{Binding IsBusy}"
+                               IsRunning="{Binding IsBusy}"
+                               Color="{DynamicResource Primary}"
+                               HeightRequest="50" />
+        </StackLayout>
+    </ScrollView>
+</ContentPage>

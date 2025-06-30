@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage x:Class="SmartTimeManagement.MAUI.Views.TasksPage"
+             xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodels="clr-namespace:SmartTimeManagement.MAUI.ViewModels"
+             xmlns:converters="clr-namespace:SmartTimeManagement.MAUI.Converters"
+             Title="Görevler">
+    
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converters:IsNotNullConverter x:Key="IsNotNullConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    
+    <ContentPage.BindingContext>
+        <viewmodels:TasksViewModel />
+    </ContentPage.BindingContext>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <!-- Header -->
+        <StackLayout Grid.Row="0" Padding="20,10" BackgroundColor="{DynamicResource Primary}">
+            <Label Text="Görevlerim" 
+                   FontSize="24" 
+                   FontAttributes="Bold" 
+                   TextColor="White" 
+                   HorizontalOptions="Center" />
+        </StackLayout>
+
+        <!-- Tasks List -->
+        <ScrollView Grid.Row="1" Padding="20">
+            <StackLayout>
+                <!-- Filter Options -->
+                <StackLayout Orientation="Horizontal" Spacing="10" Margin="0,0,0,20">
+                    <Label Text="Filtrele:" VerticalOptions="Center" />
+                    <Picker x:Name="FilterPicker" 
+                            Title="Tümü"
+                            SelectedIndex="{Binding SelectedFilterIndex}"
+                            ItemsSource="{Binding FilterOptions}" />
+                    <Button Text="Yenile" 
+                            Command="{Binding RefreshCommand}"
+                            BackgroundColor="{DynamicResource Secondary}"
+                            TextColor="White" />
+                </StackLayout>
+
+                <!-- Tasks Collection -->
+                <CollectionView ItemsSource="{Binding Tasks}" 
+                                BackgroundColor="Transparent">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Grid Padding="10" Margin="0,5">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+
+                                <Frame Grid.Column="0" 
+                                       Grid.ColumnSpan="5"
+                                       BackgroundColor="White"
+                                       BorderColor="{DynamicResource Gray200}"
+                                       CornerRadius="10"
+                                       Padding="15">
+                                    <StackLayout>
+                                        <Label Text="{Binding Title}" 
+                                               FontSize="16" 
+                                               FontAttributes="Bold" />
+                                        <Label Text="{Binding Id, StringFormat='ID: {0}'}" 
+                                               FontSize="10" 
+                                               TextColor="Red" />
+                                        <Label Text="{Binding Description}" 
+                                               FontSize="14" 
+                                               TextColor="{DynamicResource Gray600}" />
+                                        <StackLayout Orientation="Horizontal" Spacing="10">
+                                            <Label Text="{Binding Priority, Converter={StaticResource TaskPriorityToDisplayTextConverter}, StringFormat='Öncelik: {0}'}" 
+                                                   FontSize="12" 
+                                                   TextColor="{DynamicResource Primary}" />
+                                        </StackLayout>
+                                        <!-- Timer Durumu ve Süre -->
+                                        <StackLayout Orientation="Horizontal" Spacing="5">
+                                            <Label Text="{Binding Status, Converter={StaticResource TaskStatusToDisplayTextConverter}, StringFormat='Durum: {0}'}" 
+                                                   FontSize="12" 
+                                                   FontAttributes="Bold"
+                                                   TextColor="{DynamicResource Secondary}" />
+                                            <Label Text="{Binding ActualDuration, StringFormat='Süre: {0:hh\\:mm\\:ss}'}" 
+                                                   FontSize="12" 
+                                                   TextColor="{DynamicResource Success}" />
+                                            <Label Text="⏱️" FontSize="12" IsVisible="{Binding IsTimerRunning}" />
+                                        </StackLayout>
+                                        <Label FontSize="12" 
+                                               TextColor="{DynamicResource Gray500}"
+                                               IsVisible="{Binding DueDate, Converter={StaticResource IsNotNullConverter}}">
+                                            <Label.Text>
+                                                <Binding Path="DueDate" StringFormat="Bitiş: {0:dd/MM/yyyy HH:mm}" TargetNullValue="Bitiş tarihi yok" />
+                                            </Label.Text>
+                                        </Label>
+                                    </StackLayout>
+                                </Frame>
+
+                                <Button Grid.Column="1" 
+                                        x:Name="TimerButton"
+                                        Text="{Binding IsTimerRunning, Converter={StaticResource BoolToTimerTextConverter}}"
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:TasksViewModel}}, Path=ToggleTimerCommand}"
+                                        CommandParameter="{Binding}"
+                                        BackgroundColor="{DynamicResource Primary}"
+                                        TextColor="White"
+                                        FontSize="10"
+                                        Margin="2,0" />
+
+                                <Button Grid.Column="2" 
+                                        Text="Düzenle"
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:TasksViewModel}}, Path=EditTaskCommand}"
+                                        CommandParameter="{Binding}"
+                                        BackgroundColor="{DynamicResource Primary}"
+                                        TextColor="White"
+                                        FontSize="10"
+                                        Margin="2,0" />
+
+                                <Button Grid.Column="3" 
+                                        Text="Sil"
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:TasksViewModel}}, Path=DeleteTaskCommand}"
+                                        CommandParameter="{Binding}"
+                                        BackgroundColor="{DynamicResource Danger}"
+                                        TextColor="White"
+                                        FontSize="10"
+                                        Margin="2,0" />
+                            </Grid>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+
+                <!-- Empty State -->
+                <StackLayout IsVisible="{Binding IsEmpty}" 
+                             VerticalOptions="CenterAndExpand"
+                             HorizontalOptions="Center"
+                             Margin="0,50">
+                    <Label Text="Henüz görev eklenmemiş" 
+                           FontSize="18" 
+                           TextColor="{DynamicResource Gray500}"
+                           HorizontalOptions="Center" />
+                    <Label Text="Yeni görev eklemek için + butonuna tıklayın" 
+                           FontSize="14" 
+                           TextColor="{DynamicResource Gray400}"
+                           HorizontalOptions="Center" />
+                </StackLayout>
+            </StackLayout>
+        </ScrollView>
+
+        <!-- Add Task Button -->
+        <Button Grid.Row="2" 
+                Text="+ Yeni Görev Ekle"
+                Command="{Binding AddTaskCommand}"
+                BackgroundColor="{DynamicResource Primary}"
+                TextColor="White"
+                FontSize="16"
+                Margin="20"
+                CornerRadius="25"
+                HeightRequest="50" />
+    </Grid>
+</ContentPage>

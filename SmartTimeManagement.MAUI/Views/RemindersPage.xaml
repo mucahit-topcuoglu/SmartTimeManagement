@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage x:Class="SmartTimeManagement.MAUI.Views.RemindersPage"
+             xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodels="clr-namespace:SmartTimeManagement.MAUI.ViewModels"
+             xmlns:converters="clr-namespace:SmartTimeManagement.MAUI.Converters"
+             Title="Hatırlatıcılar">
+    
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converters:DateTimeToStringConverter x:Key="DateTimeConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    
+    <ContentPage.BindingContext>
+        <viewmodels:RemindersViewModel />
+    </ContentPage.BindingContext>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <!-- Header -->
+        <StackLayout Grid.Row="0" Padding="20,10" BackgroundColor="{DynamicResource Secondary}">
+            <Label Text="Hatırlatıcılarım" 
+                   FontSize="24" 
+                   FontAttributes="Bold" 
+                   TextColor="White" 
+                   HorizontalOptions="Center" />
+        </StackLayout>
+
+        <!-- Reminders List -->
+        <ScrollView Grid.Row="1" Padding="20">
+            <StackLayout>
+                <!-- Filter Options -->
+                <StackLayout Orientation="Horizontal" Spacing="10" Margin="0,0,0,20">
+                    <Label Text="Filtrele:" VerticalOptions="Center" />
+                    <Picker x:Name="FilterPicker" 
+                            Title="Tümü"
+                            SelectedIndex="{Binding SelectedFilterIndex}"
+                            ItemsSource="{Binding FilterOptions}" />
+                    <Button Text="Yenile" 
+                            Command="{Binding RefreshCommand}"
+                            BackgroundColor="{DynamicResource Primary}"
+                            TextColor="White" />
+                </StackLayout>
+
+                <!-- Reminders Collection -->
+                <CollectionView ItemsSource="{Binding Reminders}" 
+                                BackgroundColor="Transparent">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Grid Padding="10" Margin="0,5">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+
+                                <Frame Grid.Column="0" 
+                                       Grid.ColumnSpan="3"
+                                       BackgroundColor="White"
+                                       BorderColor="{DynamicResource Gray200}"
+                                       CornerRadius="10"
+                                       Padding="15">
+                                    <StackLayout>
+                                        <Label Text="{Binding Title}" 
+                                               FontSize="16" 
+                                               FontAttributes="Bold" />
+                                        <Label Text="{Binding Message}" 
+                                               FontSize="14" 
+                                               TextColor="{DynamicResource Gray600}" />
+                                        <StackLayout Orientation="Horizontal" Spacing="10">
+                                            <Label Text="{Binding ReminderType, StringFormat='Tür: {0}'}" 
+                                                   FontSize="12" 
+                                                   TextColor="{DynamicResource Secondary}" />
+                                            <Label Text="{Binding IsActive, StringFormat='Aktif: {0}'}" 
+                                                   FontSize="12" 
+                                                   TextColor="{DynamicResource Primary}" />
+                                        </StackLayout>
+                                        <Label Text="{Binding ReminderDateTime, Converter={StaticResource DateTimeConverter}, ConverterParameter='dd.MM.yyyy HH:mm', StringFormat='Tarih: {0}'}" 
+                                               FontSize="12" 
+                                               TextColor="{DynamicResource Gray500}" />
+                                        <Label Text="{Binding TaskTitle, StringFormat='Görev: {0}'}" 
+                                               FontSize="12" 
+                                               TextColor="{DynamicResource Warning}"
+                                               IsVisible="{Binding HasTask}" />
+                                    </StackLayout>
+                                </Frame>
+
+                                <Button Grid.Column="1" 
+                                        Text="Düzenle"
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:RemindersViewModel}}, Path=EditReminderCommand}"
+                                        CommandParameter="{Binding}"
+                                        BackgroundColor="{DynamicResource Warning}"
+                                        TextColor="White"
+                                        FontSize="12"
+                                        Margin="5,0" />
+
+                                <Button Grid.Column="2" 
+                                        Text="Sil"
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:RemindersViewModel}}, Path=DeleteReminderCommand}"
+                                        CommandParameter="{Binding}"
+                                        BackgroundColor="{DynamicResource Danger}"
+                                        TextColor="White"
+                                        FontSize="12"
+                                        Margin="5,0" />
+                            </Grid>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+
+                <!-- Empty State -->
+                <StackLayout IsVisible="{Binding IsEmpty}" 
+                             VerticalOptions="CenterAndExpand"
+                             HorizontalOptions="Center"
+                             Margin="0,50">
+                    <Label Text="Henüz hatırlatıcı eklenmemiş" 
+                           FontSize="18" 
+                           TextColor="{DynamicResource Gray500}"
+                           HorizontalOptions="Center" />
+                    <Label Text="Yeni hatırlatıcı eklemek için + butonuna tıklayın" 
+                           FontSize="14" 
+                           TextColor="{DynamicResource Gray400}"
+                           HorizontalOptions="Center" />
+                </StackLayout>
+            </StackLayout>
+        </ScrollView>
+
+        <!-- Add Reminder Button -->
+        <Button Grid.Row="2" 
+                Text="+ Yeni Hatırlatıcı Ekle"
+                Command="{Binding AddReminderCommand}"
+                BackgroundColor="{DynamicResource Secondary}"
+                TextColor="White"
+                FontSize="16"
+                Margin="20"
+                CornerRadius="25"
+                HeightRequest="50" />
+    </Grid>
+</ContentPage>
