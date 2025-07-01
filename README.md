@@ -119,7 +119,7 @@ Projede kullanılan MAUI kontrolleri:
 
 1. **Projeyi klonlayın:**
 ```bash
-git clone [repository-url]
+git clone https://github.com/mucahit-topcuoglu/SmartTimeManagement
 cd SmartTimeManagement
 ```
 
@@ -215,6 +215,3 @@ Bu proje eğitim amaçlı geliştirilmiştir.
 
 ---
 
-**Geliştirici**: [Adınız]
-**Tarih**: Haziran 2025
-**Teknoloji**: .NET 8, MAUI, Entity Framework Core
