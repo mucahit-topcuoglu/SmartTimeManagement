@@ -60,14 +60,7 @@ public class MainViewModel : INotifyPropertyChanged
         }
     }
 
-    public string CurrentUserDebugInfo
-    {
-        get
-        {
-            var user = UserSessionService.Instance.CurrentUser;
-            return user != null ? $"Debug: User ID={user.Id}, Email={user.Email}" : "Debug: No user logged in";
-        }
-    }
+
 
     public int TotalTasks
     {
@@ -132,7 +125,6 @@ public class MainViewModel : INotifyPropertyChanged
         };
         
         WelcomeMessage = $"{greeting}! Üretken bir gün geçirmeniz dileğiyle.";
-        OnPropertyChanged(nameof(CurrentUserDebugInfo)); // Debug bilgisini güncelle
     }
 
     private async Task LoadDataAsync()
@@ -234,7 +226,7 @@ public class MainViewModel : INotifyPropertyChanged
     {
         try
         {
-            await Shell.Current.GoToAsync("tasks/add");
+            await Shell.Current.GoToAsync("//tasks/add");
         }
         catch (Exception ex)
         {
@@ -247,7 +239,7 @@ public class MainViewModel : INotifyPropertyChanged
     {
         try
         {
-            await Shell.Current.GoToAsync("reminders/add");
+            await Shell.Current.GoToAsync("//reminders/add");
         }
         catch (Exception ex)
         {
@@ -260,7 +252,7 @@ public class MainViewModel : INotifyPropertyChanged
     {
         try
         {
-            await Shell.Current.GoToAsync("//main/tasks");
+            await Shell.Current.GoToAsync("//tasks");
         }
         catch (Exception ex)
         {

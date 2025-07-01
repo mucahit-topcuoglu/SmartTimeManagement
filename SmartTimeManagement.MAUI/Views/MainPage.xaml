@@ -26,11 +26,6 @@
                                FontAttributes="Bold" 
                                TextColor="White" 
                                HorizontalOptions="Center" />
-                        <!-- Debug: Kullanıcı ID'si -->
-                        <Label Text="{Binding CurrentUserDebugInfo}" 
-                               FontSize="12" 
-                               TextColor="LightGray" 
-                               HorizontalOptions="Center" />
                         <Label Text="Bugün ne yapmayı planlıyorsun?" 
                                FontSize="16" 
                                TextColor="White" 
@@ -70,27 +65,35 @@
                             <Button Grid.Row="0" Grid.Column="0" 
                                     Text="Yeni Görev" 
                                     Command="{Binding NewTaskCommand}"
-                                    BackgroundColor="{DynamicResource Primary}"
+                                    BackgroundColor="#2196F3"
                                     TextColor="White"
-                                    CornerRadius="8" />
+                                    CornerRadius="8"
+                                    FontSize="14"
+                                    FontAttributes="Bold" />
                             <Button Grid.Row="0" Grid.Column="1" 
                                     Text="Hatırlatıcı Ekle" 
                                     Command="{Binding NewReminderCommand}"
-                                    BackgroundColor="{DynamicResource Secondary}"
+                                    BackgroundColor="#2196F3"
                                     TextColor="White"
-                                    CornerRadius="8" />
+                                    CornerRadius="8"
+                                    FontSize="14"
+                                    FontAttributes="Bold" />
                             <Button Grid.Row="1" Grid.Column="0" 
                                     Text="Görevleri Görüntüle" 
                                     Command="{Binding ViewTasksCommand}"
-                                    BackgroundColor="{DynamicResource Success}"
+                                    BackgroundColor="#2196F3"
                                     TextColor="White"
-                                    CornerRadius="8" />
+                                    CornerRadius="8"
+                                    FontSize="14"
+                                    FontAttributes="Bold" />
                             <Button Grid.Row="1" Grid.Column="1" 
                                     Text="Rapor Oluştur" 
                                     Command="{Binding CreateReportCommand}"
-                                    BackgroundColor="{DynamicResource Warning}"
+                                    BackgroundColor="#2196F3"
                                     TextColor="White"
-                                    CornerRadius="8" />
+                                    CornerRadius="8"
+                                    FontSize="14"
+                                    FontAttributes="Bold" />
                         </Grid>
                     </StackLayout>
                 </Frame>
@@ -167,10 +170,11 @@
                         
                         <Button Text="Şifre Değiştir"
                                 Command="{Binding ChangePasswordCommand}"
-                                BackgroundColor="#FF9800"
+                                BackgroundColor="#2196F3"
                                 TextColor="White"
                                 CornerRadius="10"
                                 FontSize="16"
+                                FontAttributes="Bold"
                                 HeightRequest="50" />
                     </StackLayout>
                 </Frame>

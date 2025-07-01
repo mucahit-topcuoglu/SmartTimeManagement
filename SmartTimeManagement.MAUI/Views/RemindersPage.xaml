@@ -134,9 +134,10 @@
         <Button Grid.Row="2" 
                 Text="+ Yeni Hatırlatıcı Ekle"
                 Command="{Binding AddReminderCommand}"
-                BackgroundColor="{DynamicResource Secondary}"
+                BackgroundColor="#2196F3"
                 TextColor="White"
                 FontSize="16"
+                FontAttributes="Bold"
                 Margin="20"
                 CornerRadius="25"
                 HeightRequest="50" />
